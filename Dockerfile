@@ -1,23 +1,27 @@
-# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-
-# Копируем файл проекта из подпапки
-COPY WebApplication1/*.csproj ./
-RUN dotnet restore
-
-# Копируем весь проект
-COPY WebApplication1/. ./
-RUN dotnet publish -c Release -o /app/publish
-
-# Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 10000
 
-ENV ASPNETCORE_URLS=http://+:10000
-ENV ASPNETCORE_ENVIRONMENT=Production
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-COPY --from=build /app/publish .
+# Копируем только csproj файл для кэширования слоев
+COPY WebApplication1/WebApplication1.csproj ./
+RUN dotnet restore
 
+# Копируем весь проект
+COPY . ./
+
+# Переходим в папку проекта перед сборкой
+WORKDIR /src/WebApplication1
+RUN dotnet build -c Release -o /app/build
+
+# Публикация
+FROM build AS publish
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+
+# Финальный образ
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "WebApplication1.dll"]
