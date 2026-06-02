@@ -3,78 +3,58 @@ using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Получаем строку подключения из appsettings.json
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Настраиваем контекст базы данных с использованием SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlite(defaultConnection); 
+    options.UseSqlite(defaultConnection);
 });
 
-// Добавляем Razor Pages и сессии для простой авторизации.
+// Добавляем сервисы
 builder.Services.AddRazorPages();
 builder.Services.AddSession();
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Проверка доступности базы данных (сайт и WinForms должны использовать одну БД).
+// === ИНИЦИАЛИЗАЦИЯ БАЗЫ ДАННЫХ ===
+// Создаём таблицы автоматически, если их нет
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        if (!db.Database.CanConnect())
-        {
-            app.Logger.LogWarning("Не удалось подключиться к базе данных FitnessClubDB (LocalDB).");
-        }
+        // EnsureCreated создаёт БД и таблицы на основе ваших моделей (для SQLite)
+        db.Database.EnsureCreated();
+        app.Logger.LogInformation("База данных SQLite успешно инициализирована.");
     }
     catch (Exception ex)
     {
-        // Не падаем при старте, но логируем — иначе Visual Studio воспринимает это как падение сайта.
-        app.Logger.LogError(ex, "Ошибка при проверке подключения к базе данных.");
+        app.Logger.LogError(ex, "Ошибка при инициализации базы данных.");
     }
 }
+// =================================
 
-// Configure the HTTP request pipeline.
+// Настройка конвейера обработки запросов
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-// В Development при запуске только по HTTP (профиль "http") редирект на HTTPS приводит к предупреждению.
-// Включаем редирект только когда известен HTTPS порт или не Development.
-if (!app.Environment.IsDevelopment() || !string.IsNullOrWhiteSpace(app.Configuration["ASPNETCORE_HTTPS_PORT"]))
-{
-    app.UseHttpsRedirection();
-}
+// Редирект на HTTPS (работает корректно на Render)
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseSession();
-
-app.MapRazorPages();
-
-app.Run();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();  // Важно для wwwroot
-
-app.UseRouting();
-
 app.UseAuthorization();
 
+// Маршрутизация
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
