@@ -1,0 +1,31 @@
+## Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Сборка и временные файлы
+bin/
+obj/
+publish/
+[Dd]ebug/
+[Rr]elease/
+
+## ASP.NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Локальная SQLite БД (не хранить в Git!)
+app.db
+app.db-shm
+app.db-wal
+
+## Конфиги с секретами
+appsettings.Development.json
+*.env
+*.pfx
+
+## Node.js / npm (если есть)
+node_modules/

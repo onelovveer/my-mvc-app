@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: my-mvc-app
+    runtime: docker
+    plan: free
+    region: oregon
+    buildCommand: dotnet publish -c Release -o ./publish
+    startCommand: cd publish && dotnet WebApplication1.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:10000
