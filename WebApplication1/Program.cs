@@ -7,13 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Получаем строку подключения из appsettings.json
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 👇 ДОБАВЬТЕ ЭТИ ДВЕ СТРОКИ 👇
-Console.WriteLine($"--- DEBUG CONNECTION STRING: {defaultConnection} ---");
-if (string.IsNullOrEmpty(defaultConnection))
-{
-    Console.WriteLine("!!! ERROR: Connection string is EMPTY or NULL! Check Render Environment Variables.");
-}
-
 // Настраиваем контекст базы данных с использованием SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
