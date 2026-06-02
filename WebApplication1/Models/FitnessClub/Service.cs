@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models.FitnessClub;
 
@@ -14,6 +16,7 @@ public class Service
 
     public decimal Price { get; set; }
 
+    [Column(TypeName = "boolean")]
     public bool IsSpecialOffer { get; set; }
 
     [MaxLength(500)]
