@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Если строка в формате postgres:// — конвертируем в ключ-значение
+if (defaultConnection != null && defaultConnection.StartsWith("postgres://"))
+{
+    var npgsqlBuilder = new NpgsqlConnectionStringBuilder(defaultConnection);
+    defaultConnection = npgsqlBuilder.ConnectionString;
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
