@@ -19,14 +19,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-            // 👇 ДОБАВЬТЕ ЭТОТ БЛОК (решает проблему с датами) 👇
-    modelBuilder.ConfigureConventions(config =>
-    {
-        config.Properties<DateTime>()
-              .HaveColumnType("timestamp without time zone");
-    });
-    // 👆 КОНЕЦ БЛОКА 👆
-
         const string dbo = "dbo";
 
         modelBuilder.Entity<User>(e =>
