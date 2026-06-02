@@ -4,22 +4,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Получаем строку подключения из appsettings.json
-var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+// 👇 НАШ НОВЫЙ КОД ЗДЕСЬ 👇
+// ВРЕМЕННО ДЛЯ ТЕСТА
+var defaultConnection = "Host=dpg-d8fea1egvqtc73985vlg-a.oregon-postgres.render.com;Port=5432;Database=fitness_club_lve4;Username=fitness_user;Password=5Iepw97QzAS37f6VqeopPFTZZlVkYq3h;SSL Mode=Require;Trust Server Certificate=true;";
 
-// 👇 ОТЛАДКА 👇
-Console.WriteLine("=== DEBUG: Connection String Start ===");
-Console.WriteLine($"Value: '{defaultConnection}'");
-Console.WriteLine($"Length: {defaultConnection?.Length ?? 0}");
-Console.WriteLine($"Starts with 'Host=': {defaultConnection?.StartsWith("Host=")}");
-Console.WriteLine($"Starts with 'postgres://': {defaultConnection?.StartsWith("postgres://")}");
-Console.WriteLine("=== DEBUG: Connection String End ===");
-
-// Настраиваем контекст базы данных с использованием SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(defaultConnection); 
+    options.UseNpgsql(defaultConnection);
 });
+// 👆 КОНЕЦ НОВОГО КОДА 👆
 
 // Добавляем сервисы
 builder.Services.AddRazorPages();
