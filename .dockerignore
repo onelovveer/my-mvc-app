@@ -1,6 +1,7 @@
-Dockerfile
-render.yaml
-.git
-.gitignore
-*.sln
-*.csproj.user
+**/bin/
+**/obj/
+**/Dockerfile
+**/.dockerignore
+**/.git/
+**/*.sln
+**/render.yaml
