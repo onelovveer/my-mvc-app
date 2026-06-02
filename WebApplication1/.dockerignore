@@ -1,6 +1,0 @@
-Dockerfile
-render.yaml
-.git
-.gitignore
-*.sln
-*.csproj.user
