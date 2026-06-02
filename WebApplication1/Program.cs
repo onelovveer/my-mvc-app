@@ -9,7 +9,7 @@ var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnec
 // Настраиваем контекст базы данных с использованием SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlite(defaultConnection);
+    options.UseNpgsql(defaultConnection); 
 });
 
 // Добавляем сервисы
