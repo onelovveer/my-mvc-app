@@ -21,8 +21,8 @@ var app = builder.Build();
 
 // === ИНИЦИАЛИЗАЦИЯ БАЗЫ ДАННЫХ ===
 // Создаём таблицы автоматически, если их нет
-using (var scope = app.Services.CreateScope())
-{
+ using (var scope = app.Services.CreateScope())
+ {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
