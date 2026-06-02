@@ -4,15 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 👇 НАШ НОВЫЙ КОД ЗДЕСЬ 👇
-// ВРЕМЕННО ДЛЯ ТЕСТА
-var defaultConnection = "Host=dpg-d8fea1egvqtc73985vlg-a.oregon-postgres.render.com;Port=5432;Database=fitness_club_lve4;Username=fitness_user;Password=5Iepw97QzAS37f6VqeopPFTZZlVkYq3h;SSL Mode=Require;Trust Server Certificate=true;";
+var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(defaultConnection);
 });
-// 👆 КОНЕЦ НОВОГО КОДА 👆
 
 // Добавляем сервисы
 builder.Services.AddRazorPages();
