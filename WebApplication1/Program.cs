@@ -5,13 +5,7 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-
-if (!string.IsNullOrEmpty(defaultConnection) && defaultConnection.StartsWith("postgres://"))
-{
-    var npgsqlBuilder = new Npgsql.NpgsqlConnectionStringBuilder(defaultConnection);
-    defaultConnection = npgsqlBuilder.ConnectionString;
-}
+var defaultConnection = "Host=dpg-d8fea1egvqtc73985vlg-a.oregon-postgres.render.com;Port=5432;Database=fitness_club_lve4;Username=fitness_user;Password=5Iepw97QzAS37f6VqeopPFTZZlVkYq3h;SSL Mode=Require;Trust Server Certificate=true;";
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
