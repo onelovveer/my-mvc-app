@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq; // ← Убедитесь, что этот using есть
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApplication1.Data;
@@ -62,7 +63,8 @@ public class ServicesModel : PageModel
         decimal discountAmount = Math.Round(originalPrice * (discountPercent / 100m), 2);
         decimal finalPrice = originalPrice - discountAmount;
 
-        DateTime startDate = DateTime.Today;
+        // 👇 ИСПРАВЛЕНО: используем UtcNow вместо Today/Now для совместимости с PostgreSQL
+        DateTime startDate = DateTime.UtcNow.Date;
         DateTime endDate = startDate.AddMonths(Input.Months);
 
         _db.Subscriptions.Add(new Subscription
@@ -129,4 +131,3 @@ public class ServicesModel : PageModel
         public bool IsProlongation { get; set; }
     }
 }
-
