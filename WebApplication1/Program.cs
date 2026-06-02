@@ -7,7 +7,7 @@ var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnec
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(defaultConnection);
+    options.UseSqlite(defaultConnection); 
 });
 
 // Добавляем Razor Pages и сессии для простой авторизации.
