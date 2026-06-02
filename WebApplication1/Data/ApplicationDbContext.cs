@@ -49,7 +49,9 @@ public class ApplicationDbContext : DbContext
             e.Property(x => x.Name).HasMaxLength(200).IsRequired();
             e.Property(x => x.Type).HasMaxLength(100).IsRequired();
             e.Property(x => x.Price).HasColumnType("decimal(18,2)");
-            e.Property(x => x.IsSpecialOffer).HasColumnType("bit");
+            
+            e.Property(x => x.IsSpecialOffer).HasColumnType("boolean");
+            
             e.Property(x => x.SpecialDescription).HasMaxLength(500);
         });
 
@@ -70,4 +72,3 @@ public class ApplicationDbContext : DbContext
         });
     }
 }
-
