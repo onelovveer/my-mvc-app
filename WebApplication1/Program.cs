@@ -7,12 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Если строка в формате postgres:// — конвертируем в ключ-значение
-if (defaultConnection != null && defaultConnection.StartsWith("postgres://"))
+if (!string.IsNullOrEmpty(defaultConnection) && defaultConnection.StartsWith("postgres://"))
 {
-    var npgsqlBuilder = new NpgsqlConnectionStringBuilder(defaultConnection);
+    var npgsqlBuilder = new Npgsql.NpgsqlConnectionStringBuilder(defaultConnection);
     defaultConnection = npgsqlBuilder.ConnectionString;
 }
 
