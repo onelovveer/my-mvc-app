@@ -1,0 +1,63 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Фитнес-клуб";
+}
+
+<div class="py-3 py-lg-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <div class="wc-kicker mb-3">Премиум-фитнес · Услуги · Абонементы</div>
+            <h1 class="display-5 fw-bold mb-3">Фитнес-клуб</h1>
+            <p class="lead">
+                Добро пожаловать в пространство тренировок и заботы о форме. Здесь вы можете выбрать услугу
+                (тренажёрный зал, йога, бассейн), оформить абонемент, отслеживать историю покупок и получать скидки при продлении.
+                Администратор управляет услугами и специальными предложениями.
+            </p>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a asp-page="/Client/Services" class="btn btn-primary">Перейти к услугам</a>
+                <a asp-page="/Account/Login" class="btn btn-outline-primary">Войти</a>
+                <a asp-page="/Account/Register" class="btn btn-outline-secondary">Регистрация</a>
+                <a asp-page="/Admin/Services" class="btn btn-outline-secondary">Админ-панель</a>
+            </div>
+
+            <div class="wc-photo-grid mt-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="wc-photo-card">
+                            <img class="wc-photo-img"
+                                 src="~/images/gym.png"
+                                 alt="Тренажёрный зал" loading="lazy" />
+                            <div class="wc-photo-overlay">
+                                <div class="wc-photo-title">Тренажёрный зал</div>
+                                <div class="wc-photo-subtitle">Силовые и кардио</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="wc-photo-card">
+                            <img class="wc-photo-img"
+                                 src="~/images/yoga.png"
+                                 alt="Йога" loading="lazy" />
+                            <div class="wc-photo-overlay">
+                                <div class="wc-photo-title">Йога</div>
+                                <div class="wc-photo-subtitle">Баланс и гибкость</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="wc-photo-card">
+                            <img class="wc-photo-img"
+                                 src="~/images/pool.png"
+                                 alt="Бассейн" loading="lazy" />
+                            <div class="wc-photo-overlay">
+                                <div class="wc-photo-title">Бассейн</div>
+                                <div class="wc-photo-subtitle">Свободное плавание</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+@page
+@model WebApplication1.Pages.Admin.SubscriptionsModel
+@{
+    ViewData["Title"] = "Абонементы (админ)";
+}
+
+<div class="wc-section-title mb-3">
+    <div>
+        <div class="wc-kicker"><i class="bi bi-receipt wc-icon me-1"></i> Контроль продаж</div>
+        <h2 class="mb-0">Оформленные абонементы</h2>
+        <div class="wc-help">История покупок клиентов</div>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+            <select class="form-select" style="min-width: 260px;" name="ServiceId" aria-label="Фильтр по услуге">
+                <option value="">Все услуги</option>
+                @foreach (var s in Model.Services)
+                {
+                    if (Model.ServiceId == s.Id)
+                    {
+                        <option value="@s.Id" selected>@s.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@s.Id">@s.Name</option>
+                    }
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search me-1"></i> Найти
+            </button>
+            <a asp-page="/Admin/Subscriptions" class="btn btn-outline-secondary">
+                Сбросить
+            </a>
+        </form>
+        <a asp-page="/Admin/Services" class="btn btn-outline-primary">
+            <i class="bi bi-list-check me-1"></i> Услуги
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-table me-1 wc-icon"></i> Список абонементов</span>
+        <span class="wc-badge-muted"><i class="bi bi-clock-history me-1"></i> История</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Начало</th>
+                <th>Окончание</th>
+                <th class="text-end">К оплате</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var r in Model.Rows)
+            {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.ClientName</td>
+                    <td>@r.ServiceName</td>
+                    <td>@r.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@r.EndDate.ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">@r.FinalPrice.ToString("N2")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,146 @@
+@page
+@model WebApplication1.Pages.Admin.ServicesModel
+@{
+    ViewData["Title"] = "Услуги (админ)";
+}
+
+<div class="wc-section-title mb-3">
+    <div>
+        <div class="wc-kicker"><i class="bi bi-gear-wide-connected wc-icon me-1"></i> Администрирование</div>
+        <h2 class="mb-0">Управление услугами</h2>
+        <div class="wc-help">Добавление, редактирование и специальные предложения</div>
+    </div>
+    <div>
+        <a asp-page="/Admin/Subscriptions" class="btn btn-outline-primary">
+            <i class="bi bi-receipt me-1"></i> Абонементы
+        </a>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-warning">@Model.ErrorMessage</div>
+}
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-list-check me-1 wc-icon"></i> Список услуг</span>
+                <span class="wc-badge-muted"><i class="bi bi-lightning-charge me-1"></i> Управление</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Название</th>
+                        <th>Тип</th>
+                        <th class="text-end">Цена</th>
+                        <th>Спец</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var s in Model.Services)
+                    {
+                        <tr>
+                            <td>@s.Id</td>
+                            <td>@s.Name</td>
+                            <td>@s.Type</td>
+                            <td class="text-end">@s.Price.ToString("N2")</td>
+                            <td>
+                                @if (s.IsSpecialOffer)
+                                {
+                                    <span class="wc-badge-special"><i class="bi bi-lightning-charge-fill me-1"></i> Спец</span>
+                                }
+                                else
+                                {
+                                    <span class="wc-badge-muted"><i class="bi bi-dash-circle me-1"></i> Нет</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <form method="post" class="d-inline">
+                                    <input type="hidden" name="serviceId" value="@s.Id" />
+                                    <button class="btn btn-sm btn-outline-secondary" asp-page-handler="Edit">
+                                        <i class="bi bi-pencil-square me-1"></i> Ред.
+                                    </button>
+                                </form>
+                                <form method="post" class="d-inline ms-1" onsubmit="return confirm('Удалить услугу?');">
+                                    <input type="hidden" name="serviceId" value="@s.Id" />
+                                    <button class="btn btn-sm btn-outline-danger" asp-page-handler="Delete">
+                                        <i class="bi bi-trash3 me-1"></i> Удал.
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5 mt-3 mt-lg-0">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-sliders me-1 wc-icon"></i> @Model.FormTitle
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="Input.Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Name" class="form-label">Название</label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        <div class="wc-help small mt-1">Например: «Персональная тренировка»</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Type" class="form-label">Тип</label>
+                        <input asp-for="Input.Type" class="form-control" />
+                        <span asp-validation-for="Input.Type" class="text-danger"></span>
+                        <div class="wc-help small mt-1">Например: тренировка / йога / бассейн / абонемент</div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Price" class="form-label">Цена</label>
+                        <input asp-for="Input.Price" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="Input.Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="Input.IsSpecialOffer" class="form-check-input" />
+                        <label asp-for="Input.IsSpecialOffer" class="form-check-label">Спецпредложение</label>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.SpecialDescription" class="form-label">Описание спецпредложения</label>
+                        <textarea asp-for="Input.SpecialDescription" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="Input.SpecialDescription" class="text-danger"></span>
+                        <div class="wc-help small mt-1">Например: «Утренние занятия» или «Пакет выходного дня»</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" asp-page-handler="Save">
+                        <i class="bi bi-check2-circle me-1"></i> Сохранить
+                    </button>
+                    @if (Model.Input.Id != 0)
+                    {
+                        <button type="submit" class="btn btn-outline-secondary w-100 mt-2" asp-page-handler="Cancel">
+                            <i class="bi bi-x-circle me-1"></i> Отмена редактирования
+                        </button>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

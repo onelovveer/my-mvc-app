@@ -1,0 +1,58 @@
+@page
+@model WebApplication1.Pages.Client.MySubscriptionsModel
+@{
+    ViewData["Title"] = "Мои абонементы";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="mb-0">Мои абонементы</h2>
+        @if (Model.Client != null)
+        {
+            <div class="text-muted">
+                @Model.Client.FullName · Завершённых абонементов: @Model.Client.CompletedSubscriptions
+            </div>
+        }
+    </div>
+    <div>
+        <a asp-page="/Client/Services" class="btn btn-outline-primary">К услугам</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-warning">@Model.ErrorMessage</div>
+}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+            <tr>
+                <th>Услуга</th>
+                <th>Тип</th>
+                <th>Начало</th>
+                <th>Окончание</th>
+                <th class="text-end">Сумма</th>
+                <th class="text-end">Скидка %</th>
+                <th class="text-end">К оплате</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                <tr>
+                    <td>@row.ServiceName</td>
+                    <td>@row.Type</td>
+                    <td>@row.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@row.EndDate.ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">@row.OriginalPrice.ToString("N2")</td>
+                    <td class="text-end">@row.DiscountPercent.ToString("N2")</td>
+                    <td class="text-end">@row.FinalPrice.ToString("N2")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+

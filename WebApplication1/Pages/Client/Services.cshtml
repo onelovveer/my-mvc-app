@@ -1,0 +1,125 @@
+@page
+@model WebApplication1.Pages.Client.ServicesModel
+@{
+    ViewData["Title"] = "Услуги";
+}
+
+<div class="wc-section-title mb-3">
+    <div>
+        <div class="wc-kicker"><i class="bi bi-stars wc-icon me-1"></i> Каталог · Спецпредложения</div>
+        <h2 class="mb-0">Услуги фитнес-клуба</h2>
+        <div class="wc-help">Выберите услугу и оформите абонемент</div>
+    </div>
+    <div>
+        <a asp-page="/Client/MySubscriptions" class="btn btn-outline-primary">
+            <i class="bi bi-receipt-cutoff me-1"></i> Мои абонементы
+        </a>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-warning">@Model.ErrorMessage</div>
+}
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-grid-3x3-gap me-1 wc-icon"></i> Каталог услуг</span>
+                <span class="wc-badge-muted"><i class="bi bi-shield-check me-1"></i> Актуальные цены</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Тип</th>
+                        <th class="text-end">Цена (за месяц)</th>
+                        <th>Спецпредложение</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var s in Model.Services)
+                    {
+                        <tr>
+                            <td>@s.Name</td>
+                            <td>@s.Type</td>
+                            <td class="text-end">@s.Price.ToString("N2")</td>
+                            <td>
+                                @if (s.IsSpecialOffer)
+                                {
+                                    <span class="wc-badge-special"><i class="bi bi-lightning-charge-fill me-1"></i> Спецпредложение</span>
+                                    @if (!string.IsNullOrWhiteSpace(s.SpecialDescription))
+                                    {
+                                        <div class="wc-help small mt-1">@s.SpecialDescription</div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="wc-badge-muted"><i class="bi bi-dash-circle me-1"></i> Нет</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5 mt-3 mt-lg-0">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-credit-card-2-front me-1 wc-icon"></i> Оформление абонемента
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.ServiceId" class="form-label">Услуга</label>
+                        <select asp-for="Input.ServiceId" class="form-select">
+                            @foreach (var s in Model.Services)
+                            {
+                                <option value="@s.Id">@s.Name (@s.Price.ToString("N2") руб.)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.ServiceId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Months" class="form-label">Месяцев</label>
+                        <input asp-for="Input.Months" class="form-control" type="number" min="1" max="36" />
+                        <span asp-validation-for="Input.Months" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="Input.IsProlongation" class="form-check-input" />
+                        <label asp-for="Input.IsProlongation" class="form-check-label">
+                            Продление (скидка постоянным клиентам)
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Оплатить и оформить</button>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+                {
+                    <div class="alert alert-success mt-3 mb-0">@Model.SuccessMessage</div>
+                }
+
+                <hr class="wc-divider" />
+                <div class="wc-help small">
+                    <i class="bi bi-shield-check me-1 wc-icon"></i>
+                    Скидка при продлении зависит от истории абонементов клиента.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
