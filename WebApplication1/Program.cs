@@ -7,6 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Получаем строку подключения из appsettings.json
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// 👇 ОТЛАДКА 👇
+Console.WriteLine("=== DEBUG: Connection String Start ===");
+Console.WriteLine($"Value: '{defaultConnection}'");
+Console.WriteLine($"Length: {defaultConnection?.Length ?? 0}");
+Console.WriteLine($"Starts with 'Host=': {defaultConnection?.StartsWith("Host=")}");
+Console.WriteLine($"Starts with 'postgres://': {defaultConnection?.StartsWith("postgres://")}");
+Console.WriteLine("=== DEBUG: Connection String End ===");
+
 // Настраиваем контекст базы данных с использованием SQLite
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
